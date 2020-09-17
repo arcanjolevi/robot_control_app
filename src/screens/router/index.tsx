@@ -2,7 +2,7 @@ import React from 'react';
 import Control from '../control';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
-
+import { View } from 'react-native';
 import RouteProps from './RouterTypesDefinition';
 
 const Drawer = createDrawerNavigator<RouteProps>();
