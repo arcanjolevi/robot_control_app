@@ -7,8 +7,8 @@ interface JoyProps {
   ballRadius?: number;
   backgroundColor?: string;
   ballColor?: string;
-  onChangeX?: (valueX: string) => void;
-  onChangeY?: (valueY: string) => void;
+  refX: React.MutableRefObject<number>;
+  refY: React.MutableRefObject<number>;
 }
 
 const Joy = ({
@@ -17,8 +17,8 @@ const Joy = ({
   ballRadius = 50,
   height = 300,
   width = 200,
-  onChangeX,
-  onChangeY,
+  refX,
+  refY,
 }: JoyProps) => {
   const pan = useRef(new Animated.ValueXY()).current;
 
@@ -40,10 +40,12 @@ const Joy = ({
         horizontal = -width / 2 + ballRadius;
       }
 
-      if (onChangeX)
-        onChangeX(((horizontal * 100) / (width / 2 - ballRadius)).toFixed(2));
-      if (onChangeY)
-        onChangeY(
+      if (refX)
+        refX.current = Number(
+          ((horizontal * 100) / (width / 2 - ballRadius)).toFixed(2)
+        );
+      if (refY)
+        refY.current = Number(
           (((vertical * 100) / (height / 2 - ballRadius)) * -1).toFixed(2)
         );
 
@@ -54,8 +56,8 @@ const Joy = ({
       }).start();
     },
     onPanResponderRelease: () => {
-      if (onChangeX) onChangeX('0');
-      if (onChangeY) onChangeY('0');
+      if (refX) refX.current = 0;
+      if (refY) refY.current = 0;
       Animated.spring(pan, {
         toValue: { x: 0, y: 0 },
         useNativeDriver: true,

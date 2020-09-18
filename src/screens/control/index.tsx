@@ -4,21 +4,24 @@ import {
   ButtonsContainer,
   SliderContainer,
 } from './styles';
+import { Button, ButtonText } from '../../globalStyles/styles';
 import { View } from 'react-native';
 import Constants from 'expo-constants';
-import React, { useState } from 'react';
+import React, { useState, useCallback, useContext } from 'react';
 import {
   heightPercentageToDP,
   widthPercentageToDP,
 } from 'react-native-responsive-screen';
 import { StatusBar } from 'expo-status-bar';
-import { MaterialIcons } from '@expo/vector-icons';
 import Slider from '../../components/slide/Slider';
 import { RouteProp } from '@react-navigation/native';
 import JoyBall from '../../components/joyBall/JoyBall';
 import ButtonControl from '../../components/buttonControl';
+import { MaterialIcons, FontAwesome, AntDesign } from '@expo/vector-icons';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import RouteTypesDefinition from '../router/RouterTypesDefinition';
+
+import { ComunicationContext } from '../../contexts/comunication';
 
 type ProfileScreenRouteProp = RouteProp<RouteTypesDefinition, 'Control'>;
 type ProfileScreenNavigationProp = DrawerNavigationProp<
@@ -31,9 +34,25 @@ type Props = {
 };
 
 const Control = ({ navigation, route }: Props) => {
-  const [on, setOn] = useState(false);
-  const [lightOn, setLightsOn] = useState(false);
-  const [autoMode, setAutoMode] = useState(false);
+  const {
+    send,
+    setLimit,
+    limit,
+    speed,
+    steer,
+    switchAutoMode,
+    autoMode,
+    lightOn,
+    switchPowerA,
+    switchLight,
+    powerA,
+  } = useContext(ComunicationContext);
+
+  function increaseSpeed() {}
+
+  function decreaseSpeed() {}
+
+  function handleSend() {}
 
   return (
     <>
@@ -54,8 +73,10 @@ const Control = ({ navigation, route }: Props) => {
       </View>
       <Container>
         <JoyBall
+          refX={steer}
+          refY={speed}
           width={widthPercentageToDP(80)}
-          height={heightPercentageToDP(60)}
+          height={heightPercentageToDP(50)}
           backgroundColor='transparent'
           ballColor='#F5f5f5'
         />
@@ -63,10 +84,10 @@ const Control = ({ navigation, route }: Props) => {
         <ButtonsContainer>
           <ButtonControl
             iconName='power'
-            active={on}
+            active={powerA}
             activeColor='#8E2DE2'
             inactiveColor='#FFF'
-            onPress={() => setOn(!on)}
+            onPress={switchPowerA}
           />
 
           <ButtonControl
@@ -74,7 +95,7 @@ const Control = ({ navigation, route }: Props) => {
             active={lightOn}
             activeColor='#8E2DE2'
             inactiveColor='#FFF'
-            onPress={() => setLightsOn(!lightOn)}
+            onPress={switchLight}
             style={{ marginHorizontal: 20 }}
           />
 
@@ -83,13 +104,41 @@ const Control = ({ navigation, route }: Props) => {
             active={autoMode}
             activeColor='#8E2DE2'
             inactiveColor='#FFF'
-            onPress={() => setAutoMode(!autoMode)}
+            onPress={switchAutoMode}
           />
         </ButtonsContainer>
 
         <SliderContainer>
-          <Slider />
+          <AntDesign
+            onPress={decreaseSpeed}
+            name='minuscircleo'
+            size={24}
+            color='#FFF'
+          />
+          <View style={{ alignItems: 'center' }}>
+            <Slider
+              value={limit}
+              onChange={setLimit}
+              maximumValue={100}
+              minimumValue={0}
+            />
+            <ButtonText style={{ color: '#FFF' }}>
+              Velocidade {limit}%
+            </ButtonText>
+          </View>
+
+          <AntDesign
+            onPress={increaseSpeed}
+            name='pluscircleo'
+            size={24}
+            color='#FFF'
+          />
         </SliderContainer>
+
+        <Button onPress={send} style={{ borderColor: '#FFF' }}>
+          <ButtonText style={{ color: '#FFF' }}>Parar</ButtonText>
+          <FontAwesome name='hand-stop-o' size={24} color='#FFF' />
+        </Button>
       </Container>
     </>
   );

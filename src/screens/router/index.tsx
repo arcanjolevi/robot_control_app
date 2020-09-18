@@ -1,5 +1,7 @@
 import React from 'react';
 import Control from '../control';
+import ComunicationSettings from '../comunicationSettings';
+import AutoModeSettings from '../autoModeSettings';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import { View } from 'react-native';
@@ -23,6 +25,11 @@ const Router = () => {
         }}
       >
         <Drawer.Screen name='Control' component={Control} />
+        <Drawer.Screen
+          name='ComunicationSettings'
+          component={ComunicationSettings}
+        />
+        <Drawer.Screen name='AutoModeSettings' component={AutoModeSettings} />
       </Drawer.Navigator>
     </NavigationContainer>
   );

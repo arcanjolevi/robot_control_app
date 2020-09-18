@@ -4,16 +4,33 @@ import { StyleSheet } from 'react-native';
 
 import Slider from 'react-native-slider';
 
-const SliderMine = () => {
+interface SliderProps {
+  minimumValue: number;
+  maximumValue: number;
+  onChange: (value: number) => void;
+  value: number;
+}
+
+const SliderMine = ({
+  value,
+  maximumValue,
+  minimumValue,
+  onChange,
+}: SliderProps) => {
+  function handleChange(value: number) {
+    onChange(Number(value.toFixed(0)));
+  }
   return (
     <Slider
-      style={{ width: 200, height: 40 }}
+      style={{ width: 200, height: 40, marginHorizontal: 20 }}
       trackStyle={customStyles2.track}
       thumbStyle={customStyles2.thumb}
-      minimumValue={0}
-      maximumValue={1}
+      onValueChange={handleChange}
+      minimumValue={minimumValue}
+      maximumValue={maximumValue}
       minimumTrackTintColor='#FFFFFF'
       maximumTrackTintColor='#C4c4c4'
+      value={value}
     />
   );
 };
