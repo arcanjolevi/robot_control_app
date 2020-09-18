@@ -4,7 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 export const Container = styled.View`
   flex: 1;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
 `;
 
 export const Gradient = styled(LinearGradient)`
@@ -24,7 +24,7 @@ export const ButtonsContainer = styled.View`
 
 export const SliderContainer = styled.View`
   padding-top: 50px;
-  padding: 15px 0px 15px 0px;
+  padding: 15px 0px 0px 0px;
   align-items: center;
   justify-content: center;
   flex-direction: row;

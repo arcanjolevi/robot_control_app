@@ -6,26 +6,22 @@ import {
   Field,
   Label,
 } from './styles';
-import { Button, ButtonText } from '../../globalStyles/styles';
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
-import Constants from 'expo-constants';
-import React, { useState } from 'react';
+
 import {
   heightPercentageToDP,
   widthPercentageToDP,
 } from 'react-native-responsive-screen';
+
+import Constants from 'expo-constants';
 import { StatusBar } from 'expo-status-bar';
-import { RouteProp } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { RouteProp } from '@react-navigation/native';
+import React, { useState, useContext, useRef } from 'react';
+import { Button, ButtonText } from '../../globalStyles/styles';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
+import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { ComunicationContext } from '../../contexts/comunication';
 import RouteTypesDefinition from '../router/RouterTypesDefinition';
-import styled from 'styled-components';
 
 type ProfileScreenRouteProp = RouteProp<
   RouteTypesDefinition,
@@ -41,6 +37,18 @@ type Props = {
 };
 
 const ComunicationSettings = ({ navigation, route }: Props) => {
+  const { updatePort, updateAdress, adress, port } = useContext(
+    ComunicationContext
+  );
+
+  const adressText = useRef('');
+  const portText = useRef('');
+
+  function handleSave() {
+    updateAdress(adressText.current);
+    updatePort(portText.current);
+  }
+
   return (
     <>
       <StatusBar backgroundColor='transparent' style='light' />
@@ -58,26 +66,22 @@ const ComunicationSettings = ({ navigation, route }: Props) => {
         <Field style={style.field}>
           <Label>Adress</Label>
           <TextInput
+            onChangeText={(t) => (adressText.current = t)}
+            value={adress}
             placeholder='192.168.1.2'
             keyboardType='numeric'
             style={style.inputText}
-          ></TextInput>
+          />
         </Field>
         <Field style={style.field}>
           <Label>Port</Label>
           <TextInput
+            onChangeText={(t) => (portText.current = t)}
+            value={port}
             placeholder='3334'
             keyboardType='numeric'
             style={style.inputText}
-          ></TextInput>
-        </Field>
-        <Field style={style.field}>
-          <Label>Tempo de resposta(ms)</Label>
-          <TextInput
-            placeholder='20'
-            keyboardType='numeric'
-            style={style.inputText}
-          ></TextInput>
+          />
         </Field>
         <View
           style={{
@@ -87,7 +91,7 @@ const ComunicationSettings = ({ navigation, route }: Props) => {
             marginTop: 20,
           }}
         >
-          <Button style={{ width: 120 }}>
+          <Button onPress={handleSave} style={{ width: 120 }}>
             <ButtonText>Salvar</ButtonText>
           </Button>
         </View>

@@ -22,6 +22,7 @@ import { DrawerNavigationProp } from '@react-navigation/drawer';
 import RouteTypesDefinition from '../router/RouterTypesDefinition';
 
 import { ComunicationContext } from '../../contexts/comunication';
+import { DataContext } from '../../contexts/dataContext';
 
 type ProfileScreenRouteProp = RouteProp<RouteTypesDefinition, 'Control'>;
 type ProfileScreenNavigationProp = DrawerNavigationProp<
@@ -35,18 +36,18 @@ type Props = {
 
 const Control = ({ navigation, route }: Props) => {
   const {
-    send,
-    setLimit,
+    autoMode,
+    switchAutoMode,
+    lightOn,
+    switchLight,
     limit,
+    setLimit,
+    powerA,
+    switchPowerA,
     speed,
     steer,
-    switchAutoMode,
-    autoMode,
-    lightOn,
-    switchPowerA,
-    switchLight,
-    powerA,
-  } = useContext(ComunicationContext);
+    send,
+  } = useContext(DataContext);
 
   function increaseSpeed() {}
 
@@ -73,6 +74,7 @@ const Control = ({ navigation, route }: Props) => {
       </View>
       <Container>
         <JoyBall
+          send={send}
           refX={steer}
           refY={speed}
           width={widthPercentageToDP(80)}

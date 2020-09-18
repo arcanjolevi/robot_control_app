@@ -24,12 +24,21 @@ const Router = () => {
           },
         }}
       >
-        <Drawer.Screen name='Control' component={Control} />
+        <Drawer.Screen
+          name='Control'
+          component={Control}
+          options={{ title: 'Controle' }}
+        />
         <Drawer.Screen
           name='ComunicationSettings'
           component={ComunicationSettings}
+          options={{ title: 'Ajustes de Comunicação' }}
         />
-        <Drawer.Screen name='AutoModeSettings' component={AutoModeSettings} />
+        <Drawer.Screen
+          name='AutoModeSettings'
+          component={AutoModeSettings}
+          options={{ title: 'Ajustes Modo Automático' }}
+        />
       </Drawer.Navigator>
     </NavigationContainer>
   );

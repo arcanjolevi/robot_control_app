@@ -6,26 +6,23 @@ import {
   Field,
   Label,
 } from './styles';
-import { Button, ButtonText } from '../../globalStyles/styles';
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
-import Constants from 'expo-constants';
-import React, { useState } from 'react';
+
 import {
   heightPercentageToDP,
   widthPercentageToDP,
 } from 'react-native-responsive-screen';
+
+import Constants from 'expo-constants';
 import { StatusBar } from 'expo-status-bar';
-import { RouteProp } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { RouteProp } from '@react-navigation/native';
+import { DataContext } from '../../contexts/dataContext';
+import { View, TextInput, StyleSheet } from 'react-native';
+import { Button, ButtonText } from '../../globalStyles/styles';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
+import AsyncStorage from '@react-native-community/async-storage';
 import RouteTypesDefinition from '../router/RouterTypesDefinition';
-import styled from 'styled-components';
+import React, { useContext, useState, useRef, useEffect } from 'react';
 
 type ProfileScreenRouteProp = RouteProp<
   RouteTypesDefinition,
@@ -41,6 +38,45 @@ type Props = {
 };
 
 const AutoModeSettings = ({ navigation, route }: Props) => {
+  const { autoModeData, updateModeData } = useContext(DataContext);
+
+  const limitRef = useRef('');
+  const steerRef = useRef('');
+  const speedRef = useRef('');
+  const correctionsMovementsRef = useRef('');
+  const correctionFactorRef = useRef('');
+  const detectDistanceRef = useRef('');
+  const moveTimeRef = useRef('');
+  const stopTimeRef = useRef('');
+
+  async function handleSave() {
+    const obj = {
+      limit: limitRef.current,
+      steer: steerRef.current,
+      speed: speedRef.current,
+      correctionsMovements: correctionsMovementsRef.current,
+      correctionFactor: correctionFactorRef.current,
+      detectDistance: detectDistanceRef.current,
+      moveTime: moveTimeRef.current,
+      stopTime: stopTimeRef.current,
+    };
+
+    updateModeData(obj);
+  }
+
+  useEffect(() => {
+    if (autoModeData) {
+      limitRef.current = autoModeData.limit;
+      steerRef.current = autoModeData.steer;
+      speedRef.current = autoModeData.speed;
+      correctionsMovementsRef.current = autoModeData.correctionsMovements;
+      correctionFactorRef.current = autoModeData.correctionFactor;
+      detectDistanceRef.current = autoModeData.detectDistance;
+      moveTimeRef.current = autoModeData.moveTime;
+      stopTimeRef.current = autoModeData.stopTime;
+    }
+  }, [autoModeData]);
+
   return (
     <>
       <StatusBar backgroundColor='transparent' style='light' />
@@ -58,7 +94,8 @@ const AutoModeSettings = ({ navigation, route }: Props) => {
         <Field style={style.field}>
           <Label>Limite</Label>
           <TextInput
-            placeholder='50'
+            onChangeText={(t) => (limitRef.current = t)}
+            placeholder={autoModeData.limit}
             keyboardType='numeric'
             style={style.inputText}
           ></TextInput>
@@ -66,57 +103,64 @@ const AutoModeSettings = ({ navigation, route }: Props) => {
         <Field style={style.field}>
           <Label>Direção</Label>
           <TextInput
-            placeholder='-2'
+            placeholder={autoModeData.steer}
             keyboardType='numeric'
             style={style.inputText}
+            onChangeText={(t) => (steerRef.current = t)}
           ></TextInput>
         </Field>
         <Field style={style.field}>
           <Label>Velocidade</Label>
           <TextInput
-            placeholder='-26'
+            placeholder={autoModeData.speed}
             keyboardType='numeric'
             style={style.inputText}
+            onChangeText={(t) => (speedRef.current = t)}
           ></TextInput>
         </Field>
         <Field style={style.field}>
           <Label>N de movimentos de correção</Label>
           <TextInput
-            placeholder='5'
+            placeholder={autoModeData.correctionsMovements}
             keyboardType='numeric'
             style={style.inputText}
+            onChangeText={(t) => (correctionsMovementsRef.current = t)}
           ></TextInput>
         </Field>
         <Field style={style.field}>
           <Label>Fator de correção</Label>
           <TextInput
-            placeholder='15'
+            placeholder={autoModeData.correctionFactor}
             keyboardType='numeric'
             style={style.inputText}
+            onChangeText={(t) => (correctionFactorRef.current = t)}
           ></TextInput>
         </Field>
         <Field style={style.field}>
           <Label>Distância de colisão(m)</Label>
           <TextInput
-            placeholder='1.5'
+            placeholder={autoModeData.detectDistance}
             keyboardType='numeric'
             style={style.inputText}
+            onChangeText={(t) => (detectDistanceRef.current = t)}
           ></TextInput>
         </Field>
         <Field style={style.field}>
           <Label>Andar por(seg)</Label>
           <TextInput
-            placeholder='0'
+            placeholder={autoModeData.moveTime}
             keyboardType='numeric'
             style={style.inputText}
+            onChangeText={(t) => (moveTimeRef.current = t)}
           ></TextInput>
         </Field>
         <Field style={style.field}>
           <Label>Parar por(seg)</Label>
           <TextInput
-            placeholder='0'
+            placeholder={autoModeData.stopTime}
             keyboardType='numeric'
             style={style.inputText}
+            onChangeText={(t) => (stopTimeRef.current = t)}
           ></TextInput>
         </Field>
 
@@ -128,7 +172,7 @@ const AutoModeSettings = ({ navigation, route }: Props) => {
             marginTop: 20,
           }}
         >
-          <Button style={{ width: 120 }}>
+          <Button onPress={handleSave} style={{ width: 120 }}>
             <ButtonText>Salvar</ButtonText>
           </Button>
         </View>

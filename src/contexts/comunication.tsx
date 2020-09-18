@@ -1,87 +1,79 @@
-import React, {
-  Children,
-  createContext,
-  useState,
-  useCallback,
-  useRef,
-  useEffect,
-} from 'react';
+import React, { createContext, useState, useCallback, useEffect } from 'react';
+import { Alert } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import io from 'socket.io-client';
-
-interface ComProps {
-  adress?: string;
-  port?: string;
-  answerTime?: number;
-  steer: React.MutableRefObject<number>;
-  speed: React.MutableRefObject<number>;
-  autoMode: boolean;
-  powerA: boolean;
-  limit: number;
-  lightOn: boolean;
-  setLimit: (limit: number) => void;
-  switchPowerA: () => void;
-  switchLight: () => void;
-  switchAutoMode: () => void;
-  connectToServer: () => void;
-  send: () => void;
-}
-
-interface ProviderProps {
-  children: React.ReactNode;
-}
 
 export const ComunicationContext = createContext<ComProps>({} as ComProps);
 
 export const ComunicationProvider = ({ children }: ProviderProps) => {
   const [adress, setAdress] = useState('192.168.0.109');
   const [port, setPort] = useState('3000');
-  const [client, setClient] = useState(io(`http://${adress}:${port}`));
+  const [client, setClient] = useState(io(''));
+  const [alertFlag, setAlertFlag] = useState(false);
 
-  const steer = useRef(0);
-  const speed = useRef(0);
-  const [limit, setLimit] = useState(0);
-  const [lightOn, setLightOn] = useState(false);
-  const [autoMode, setAutoMode] = useState(false);
-  const [powerA, setPowerA] = useState(false);
-
-  const connectToServer = useCallback(() => {
-    setClient(io(`http://${adress}:${port}`));
-  }, []);
-
-  const send = () => {
+  const send = (data: any) => {
     if (client.connected) {
       client.emit('client_update', {
-        data: {
-          steer: steer.current,
-          speed: speed.current,
-          limit,
-          lightOn,
-          autoMode,
-          powerA,
-        },
+        data,
       });
     }
   };
 
+  const loadInitialConfig = async () => {
+    const adressStr = await AsyncStorage.getItem('adress');
+    const portStr = await AsyncStorage.getItem('port');
+    if (adressStr && portStr) {
+      setAdress(adressStr);
+      setPort(portStr);
+    }
+  };
+
+  const updateAdress = async (value: string) => {
+    await AsyncStorage.setItem('adress', value);
+    setAdress(value);
+  };
+
+  const updatePort = async (value: string) => {
+    await AsyncStorage.setItem('port', value);
+    setPort(value);
+  };
+
+  useEffect(() => {
+    setClient(io(`http://${adress}:${port}`));
+    loadInitialConfig();
+    return () => {
+      if (client.connected) {
+        client.close();
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    client.close();
+    setClient(io(`http://${adress}:${port}`));
+  }, [adress, port]);
+
   return (
     <ComunicationContext.Provider
       value={{
+        updateAdress,
+        updatePort,
         send,
-        switchLight: () => setLightOn(!lightOn),
-        switchAutoMode: () => setAutoMode(!autoMode),
-        switchPowerA: () => setPowerA(!powerA),
-        setLimit,
-        lightOn,
-        limit,
-        autoMode,
-        powerA,
-        steer,
-        speed,
-        adress,
-        connectToServer,
       }}
     >
       {children}
     </ComunicationContext.Provider>
   );
 };
+
+interface ComProps {
+  updateAdress: (adress: string) => void;
+  updatePort: (port: string) => void;
+  send: (data: any) => void;
+  adress: string;
+  port: string;
+}
+
+interface ProviderProps {
+  children: React.ReactNode;
+}
