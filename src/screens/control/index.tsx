@@ -4,25 +4,27 @@ import {
   ButtonsContainer,
   SliderContainer,
 } from './styles';
-import { Button, ButtonText } from '../../globalStyles/styles';
-import { View } from 'react-native';
-import Constants from 'expo-constants';
-import React, { useState, useCallback, useContext } from 'react';
+
 import {
   heightPercentageToDP,
   widthPercentageToDP,
 } from 'react-native-responsive-screen';
+
+import { View, Text } from 'react-native';
+import Constants from 'expo-constants';
 import { StatusBar } from 'expo-status-bar';
 import Slider from '../../components/slide/Slider';
 import { RouteProp } from '@react-navigation/native';
 import JoyBall from '../../components/joyBall/JoyBall';
-import ButtonControl from '../../components/buttonControl';
-import { MaterialIcons, FontAwesome, AntDesign } from '@expo/vector-icons';
-import { DrawerNavigationProp } from '@react-navigation/drawer';
-import RouteTypesDefinition from '../router/RouterTypesDefinition';
-
-import { ComunicationContext } from '../../contexts/comunication';
 import { DataContext } from '../../contexts/dataContext';
+import { ComunicationContext } from '../../contexts/comunication';
+import ButtonControl from '../../components/buttonControl';
+import { Button, ButtonText } from '../../globalStyles/styles';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
+import React, { useState, useCallback, useContext } from 'react';
+import RouteTypesDefinition from '../router/RouterTypesDefinition';
+import ConnectedIndicator from '../../components/connectedIndicator';
+import { MaterialIcons, FontAwesome, AntDesign } from '@expo/vector-icons';
 
 type ProfileScreenRouteProp = RouteProp<RouteTypesDefinition, 'Control'>;
 type ProfileScreenNavigationProp = DrawerNavigationProp<
@@ -49,9 +51,17 @@ const Control = ({ navigation, route }: Props) => {
     send,
   } = useContext(DataContext);
 
-  function increaseSpeed() {}
+  const { connected } = useContext(ComunicationContext);
 
-  function decreaseSpeed() {}
+  function increaseLimit() {
+    if (limit < 100) setLimit(limit + 1);
+  }
+
+  function decreaseLimit() {
+    if (limit > 0) {
+      setLimit(limit - 1);
+    }
+  }
 
   function handleSend() {}
 
@@ -62,7 +72,10 @@ const Control = ({ navigation, route }: Props) => {
       <View
         style={{
           marginTop: Constants.statusBarHeight + 10,
-          marginLeft: 10,
+          marginHorizontal: 10,
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
         }}
       >
         <MaterialIcons
@@ -71,6 +84,7 @@ const Control = ({ navigation, route }: Props) => {
           size={35}
           color='#FFF'
         />
+        <ConnectedIndicator connected={connected} />
       </View>
       <Container>
         <JoyBall
@@ -112,7 +126,7 @@ const Control = ({ navigation, route }: Props) => {
 
         <SliderContainer>
           <AntDesign
-            onPress={decreaseSpeed}
+            onPress={decreaseLimit}
             name='minuscircleo'
             size={24}
             color='#FFF'
@@ -130,7 +144,7 @@ const Control = ({ navigation, route }: Props) => {
           </View>
 
           <AntDesign
-            onPress={increaseSpeed}
+            onPress={increaseLimit}
             name='pluscircleo'
             size={24}
             color='#FFF'

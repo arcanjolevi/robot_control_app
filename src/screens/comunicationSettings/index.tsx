@@ -16,7 +16,7 @@ import Constants from 'expo-constants';
 import { StatusBar } from 'expo-status-bar';
 import { MaterialIcons } from '@expo/vector-icons';
 import { RouteProp } from '@react-navigation/native';
-import React, { useState, useContext, useRef } from 'react';
+import React, { useState, useContext, useRef, useEffect } from 'react';
 import { Button, ButtonText } from '../../globalStyles/styles';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
@@ -49,6 +49,13 @@ const ComunicationSettings = ({ navigation, route }: Props) => {
     updatePort(portText.current);
   }
 
+  useEffect(() => {
+    if (adress && port) {
+      adressText.current = adress;
+      portText.current = port;
+    }
+  }, [adress, port]);
+
   return (
     <>
       <StatusBar backgroundColor='transparent' style='light' />
@@ -67,8 +74,7 @@ const ComunicationSettings = ({ navigation, route }: Props) => {
           <Label>Adress</Label>
           <TextInput
             onChangeText={(t) => (adressText.current = t)}
-            value={adress}
-            placeholder='192.168.1.2'
+            placeholder={adress}
             keyboardType='numeric'
             style={style.inputText}
           />
@@ -77,8 +83,7 @@ const ComunicationSettings = ({ navigation, route }: Props) => {
           <Label>Port</Label>
           <TextInput
             onChangeText={(t) => (portText.current = t)}
-            value={port}
-            placeholder='3334'
+            placeholder={port}
             keyboardType='numeric'
             style={style.inputText}
           />

@@ -8,15 +8,17 @@ export const ComunicationContext = createContext<ComProps>({} as ComProps);
 export const ComunicationProvider = ({ children }: ProviderProps) => {
   const [adress, setAdress] = useState('192.168.0.109');
   const [port, setPort] = useState('3000');
-  const [client, setClient] = useState(io(''));
   const [alertFlag, setAlertFlag] = useState(false);
+  const [connected, setConnected] = useState(false);
+  const [client, setClient] = useState(io(''));
 
   const send = (data: any) => {
+    /*
     if (client.connected) {
       client.emit('client_update', {
         data,
       });
-    }
+    }*/
   };
 
   const loadInitialConfig = async () => {
@@ -38,8 +40,24 @@ export const ComunicationProvider = ({ children }: ProviderProps) => {
     setPort(value);
   };
 
+  const connect = () => {
+    client.close();
+    const newClient = io(`http://${adress}:${port}`);
+
+    newClient.on('disconnect', () => {
+      setConnected(false);
+      console.log('Cliente desconectado');
+    });
+
+    newClient.on('connect', () => {
+      setConnected(true);
+      console.log('Cliente connectado');
+    });
+
+    setClient(newClient);
+  };
+
   useEffect(() => {
-    setClient(io(`http://${adress}:${port}`));
     loadInitialConfig();
     return () => {
       if (client.connected) {
@@ -49,16 +67,18 @@ export const ComunicationProvider = ({ children }: ProviderProps) => {
   }, []);
 
   useEffect(() => {
-    client.close();
-    setClient(io(`http://${adress}:${port}`));
+    connect();
   }, [adress, port]);
 
   return (
     <ComunicationContext.Provider
       value={{
+        adress,
+        port,
         updateAdress,
         updatePort,
         send,
+        connected,
       }}
     >
       {children}
@@ -72,6 +92,7 @@ interface ComProps {
   send: (data: any) => void;
   adress: string;
   port: string;
+  connected: boolean;
 }
 
 interface ProviderProps {
