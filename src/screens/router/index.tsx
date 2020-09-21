@@ -1,11 +1,11 @@
 import React from 'react';
+import Info from '../info';
 import Control from '../control';
-import ComunicationSettings from '../comunicationSettings';
-import AutoModeSettings from '../autoModeSettings';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import { NavigationContainer } from '@react-navigation/native';
-import { View } from 'react-native';
 import RouteProps from './RouterTypesDefinition';
+import AutoModeSettings from '../autoModeSettings';
+import ComunicationSettings from '../comunicationSettings';
+import { NavigationContainer } from '@react-navigation/native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
 const Drawer = createDrawerNavigator<RouteProps>();
 
@@ -13,7 +13,7 @@ const Router = () => {
   return (
     <NavigationContainer>
       <Drawer.Navigator
-        initialRouteName='Control'
+        initialRouteName='Info'
         drawerStyle={{ backgroundColor: '#8E2DE2' }}
         drawerContentOptions={{
           activeBackgroundColor: '#8E1DEA',
@@ -38,6 +38,11 @@ const Router = () => {
           name='AutoModeSettings'
           component={AutoModeSettings}
           options={{ title: 'Ajustes Modo Automático' }}
+        />
+        <Drawer.Screen
+          name='Info'
+          component={Info}
+          options={{ title: 'Informações' }}
         />
       </Drawer.Navigator>
     </NavigationContainer>
