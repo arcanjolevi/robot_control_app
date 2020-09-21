@@ -19,7 +19,7 @@ import { RouteProp } from '@react-navigation/native';
 import React, { useState, useContext, useRef, useEffect } from 'react';
 import { Button, ButtonText } from '../../globalStyles/styles';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { View, Alert, TextInput, StyleSheet } from 'react-native';
 import { ComunicationContext } from '../../contexts/comunication';
 import RouteTypesDefinition from '../router/RouterTypesDefinition';
 
@@ -47,6 +47,7 @@ const ComunicationSettings = ({ navigation, route }: Props) => {
   function handleSave() {
     updateAdress(adressText.current);
     updatePort(portText.current);
+    Alert.alert('Sucesso', 'As informações foram salvas com êxito.');
   }
 
   useEffect(() => {

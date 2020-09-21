@@ -3,6 +3,7 @@ type RootDrawerParamList = {
   ComunicationSettings: undefined;
   AutoModeSettings: undefined;
   Info: undefined;
+  Instructions: undefined;
 };
 
 export default RootDrawerParamList;

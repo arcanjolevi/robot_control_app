@@ -1,9 +1,9 @@
 import {
   Container,
   Gradient,
-  InformationText,
-  InfoContainer,
-  Information,
+  InstructionText,
+  IntructionsContainer,
+  Instruction,
 } from './styles';
 
 import {
@@ -25,7 +25,7 @@ import RouteTypesDefinition from '../router/RouterTypesDefinition';
 import ConnectedIndicator from '../../components/connectedIndicator';
 import { MaterialIcons, FontAwesome, AntDesign } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import * as Application from 'expo-application';
+
 const sponsors = require('../../../assets/sponsors.png');
 
 type ProfileScreenRouteProp = RouteProp<RouteTypesDefinition, 'Info'>;
@@ -61,19 +61,46 @@ const Info = ({ navigation, route }: Props) => {
           color='#FFF'
         />
         <Text style={{ color: '#FFF', fontWeight: 'bold' }}>
-          Informações da aplicação
+          Instruções para utililação
         </Text>
       </View>
       <Container>
-        <InfoContainer
+        <IntructionsContainer
           style={{
             width: widthPercentageToDP(80),
           }}
         >
-          <Information>
-            <InformationText>Version: 0.7.0</InformationText>
-          </Information>
-        </InfoContainer>
+          <Instruction>
+            <InstructionText>
+              I - Após ligar o robô, aguarde dois minutos.
+            </InstructionText>
+          </Instruction>
+
+          <Instruction>
+            <InstructionText>
+              II - Quando o status seja: "Conectado" avance para o modo de
+              Controle.
+            </InstructionText>
+          </Instruction>
+
+          <Instruction>
+            <InstructionText>Status:</InstructionText>
+            <ConnectedIndicator connected={connected} />
+          </Instruction>
+
+          <Instruction onPress={() => navigation.navigate('Control')}>
+            <InstructionText>Modo de Controle ❯</InstructionText>
+          </Instruction>
+        </IntructionsContainer>
+
+        <Image
+          source={sponsors}
+          style={{
+            width: widthPercentageToDP(80),
+            height: heightPercentageToDP(40),
+            borderRadius: 8,
+          }}
+        />
       </Container>
     </>
   );

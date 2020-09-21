@@ -12,13 +12,20 @@ export const ComunicationProvider = ({ children }: ProviderProps) => {
   const [connected, setConnected] = useState(false);
   const [client, setClient] = useState(io(''));
 
-  const send = (data: any) => {
-    /*
-    if (client.connected) {
-      client.emit('client_update', {
+  const sendControl = (data: any) => {
+    if (connected) {
+      client.emit('control_update', {
         data,
       });
-    }*/
+    }
+  };
+
+  const sendAutoModeParams = (data: any) => {
+    if (connected) {
+      client.emit('auto_mode_params_update', {
+        data,
+      });
+    }
   };
 
   const loadInitialConfig = async () => {
@@ -54,6 +61,12 @@ export const ComunicationProvider = ({ children }: ProviderProps) => {
       console.log('Cliente connectado');
     });
 
+    newClient.on('data_from_robot', (data: any) => {
+      Alert.alert('Hey', 'Message from robot, check the console logs');
+      console.log('Message from robot');
+      console.log(data);
+    });
+
     setClient(newClient);
   };
 
@@ -73,11 +86,12 @@ export const ComunicationProvider = ({ children }: ProviderProps) => {
   return (
     <ComunicationContext.Provider
       value={{
+        sendAutoModeParams,
         adress,
         port,
         updateAdress,
         updatePort,
-        send,
+        sendControl,
         connected,
       }}
     >
@@ -89,7 +103,8 @@ export const ComunicationProvider = ({ children }: ProviderProps) => {
 interface ComProps {
   updateAdress: (adress: string) => void;
   updatePort: (port: string) => void;
-  send: (data: any) => void;
+  sendControl: (data: any) => void;
+  sendAutoModeParams: (data: any) => void;
   adress: string;
   port: string;
   connected: boolean;

@@ -14,12 +14,12 @@ export const Gradient = styled(LinearGradient)`
   height: 100%;
 `;
 
-export const InfoContainer = styled.View`
+export const IntructionsContainer = styled.View`
   align-items: flex-start;
   justify-content: flex-start;
 `;
 
-export const Information = styled.TouchableOpacity`
+export const Instruction = styled.TouchableOpacity`
   background-color: rgba(255, 255, 255, 0.2);
   border-radius: 8px;
   padding: 15px;
@@ -30,7 +30,7 @@ export const Information = styled.TouchableOpacity`
   flex-direction: row;
 `;
 
-export const InformationText = styled.Text`
+export const InstructionText = styled.Text`
   color: #fff;
   font-size: 16px;
   font-weight: bold;

@@ -1,5 +1,6 @@
 import React from 'react';
 import Info from '../info';
+import Instructions from '../instructions';
 import Control from '../control';
 import RouteProps from './RouterTypesDefinition';
 import AutoModeSettings from '../autoModeSettings';
@@ -13,7 +14,7 @@ const Router = () => {
   return (
     <NavigationContainer>
       <Drawer.Navigator
-        initialRouteName='Info'
+        initialRouteName='Instructions'
         drawerStyle={{ backgroundColor: '#8E2DE2' }}
         drawerContentOptions={{
           activeBackgroundColor: '#8E1DEA',
@@ -40,9 +41,14 @@ const Router = () => {
           options={{ title: 'Ajustes Modo Automático' }}
         />
         <Drawer.Screen
+          name='Instructions'
+          component={Instructions}
+          options={{ title: 'Instruções de uso' }}
+        />
+        <Drawer.Screen
           name='Info'
           component={Info}
-          options={{ title: 'Informações' }}
+          options={{ title: 'Informações da aplicação' }}
         />
       </Drawer.Navigator>
     </NavigationContainer>

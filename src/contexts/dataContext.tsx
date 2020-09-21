@@ -8,11 +8,14 @@ import React, {
 } from 'react';
 import { ComunicationContext } from './comunication';
 import AsyncStorage from '@react-native-community/async-storage';
+import { Alert } from 'react-native';
 
 export const DataContext = createContext<ComProps>({} as ComProps);
 
 export const DataContextProvider = ({ children }: ProviderProps) => {
-  const { send } = useContext(ComunicationContext);
+  const { sendControl, sendAutoModeParams, connected } = useContext(
+    ComunicationContext
+  );
 
   const steer = useRef(0);
   const speed = useRef(0);
@@ -25,8 +28,26 @@ export const DataContextProvider = ({ children }: ProviderProps) => {
     defaultAutoModeData
   );
 
+  const handleLightSwitch = () => {
+    if (connected) {
+      setLightOn(!lightOn);
+    }
+  };
+
+  const handlePowerSwitch = () => {
+    if (connected) {
+      setPowerA(!powerA);
+    }
+  };
+
+  const handleAutoModeSwitch = () => {
+    if (connected) {
+      setAutoMode(!autoMode);
+    }
+  };
+
   function handleSendData() {
-    send({
+    sendControl({
       limit,
       lightOn,
       autoMode,
@@ -48,11 +69,16 @@ export const DataContextProvider = ({ children }: ProviderProps) => {
     const str = JSON.stringify(data);
     await AsyncStorage.setItem('autoModeData', str);
     setAutoModeData(data);
+    Alert.alert('Sucesso', 'As informações foram salvas com êxito.');
   }
 
   useEffect(() => {
     handleSendData();
   }, [limit, lightOn, autoMode, powerA]);
+
+  useEffect(() => {
+    sendAutoModeParams(autoModeData);
+  }, [autoMode, autoModeData]);
 
   useEffect(() => {
     loadDataFromStorage();
@@ -61,9 +87,9 @@ export const DataContextProvider = ({ children }: ProviderProps) => {
   return (
     <DataContext.Provider
       value={{
-        switchLight: () => setLightOn(!lightOn),
-        switchAutoMode: () => setAutoMode(!autoMode),
-        switchPowerA: () => setPowerA(!powerA),
+        switchLight: handleLightSwitch,
+        switchAutoMode: handleAutoModeSwitch,
+        switchPowerA: handlePowerSwitch,
         setLimit,
         lightOn,
         limit,
