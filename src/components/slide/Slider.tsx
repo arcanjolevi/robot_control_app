@@ -17,6 +17,7 @@ const SliderMine = ({
   minimumValue,
   onChange,
 }: SliderProps) => {
+  console.disableYellowBox = true;
   function handleChange(value: number) {
     onChange(Number(value.toFixed(0)));
   }

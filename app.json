@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "coronaK",
-    "slug": "coronaK",
-    "version": "1.0.0",
+    "name": "CoronaKiller",
+    "slug": "CoronaKiller",
+    "version": "0.7.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -17,10 +17,17 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.labiot.coronaKiller",
+      "buildNumber": "0.7.0"
+    },
+    "android": {
+      "package": "com.labiot.coronaKiller",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": ""
   }
 }
