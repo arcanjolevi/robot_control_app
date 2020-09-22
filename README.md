@@ -48,7 +48,7 @@ https://github.com/arcanjolevi/robot_control_interface
 
 ### ❯ How run the server
 
-* Clone this ropository
+* Clone the ropository of the server
 ```
 https://github.com/arcanjolevi/robot_control_interface.git && cd robot_control_interface
 ```
