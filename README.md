@@ -1,6 +1,12 @@
 # Robot control app
 
 <h1 align="center">
+    <img alt="CCL" title="logo" src="https://github.com/arcanjolevi/robot_control_interface/blob/master/schemas/ezgif.com-video-to-gif.gif" width="700px" />
+</h1>
+
+### Communication layer
+
+<h1 align="center">
     <img alt="CCL" title="logo" src="https://github.com/arcanjolevi/control_communication_interface_for_hover_robot/blob/master/schemas/CCL.png" width="400px" />
 </h1>
 
