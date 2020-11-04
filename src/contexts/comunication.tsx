@@ -14,17 +14,13 @@ export const ComunicationProvider = ({ children }: ProviderProps) => {
 
   const sendControl = (data: any) => {
     if (connected) {
-      client.emit('control_update', {
-        data,
-      });
+      client.emit('control_update', data);
     }
   };
 
   const sendAutoModeParams = (data: any) => {
     if (connected) {
-      client.emit('auto_mode_params_update', {
-        data,
-      });
+      client.emit('auto_mode_params_update',data);
     }
   };
 
